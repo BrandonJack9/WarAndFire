@@ -1,94 +1,162 @@
-class Demo1 extends AdventureScene {
+class campsite extends AdventureScene {
     constructor() {
-        super("demo1", "First Room");
+        super("campsite" , "CAMP");
     }
+
+    preload(){
+        this.load.path = "./assets/";
+        this.load.image('sword', 'sword.png');
+        this.load.image('matches', 'matches.png');
+        this.load.image('sign', 'sign.png');
+    }
+    
 
     onEnter() {
 
-        let clip = this.add.text(this.w * 0.3, this.w * 0.3, "📎 paperclip")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => this.showMessage("Metal, bent."))
-            .on('pointerdown', () => {
-                this.showMessage("No touching!");
-                this.tweens.add({
-                    targets: clip,
-                    x: '+=' + this.s,
-                    repeat: 2,
-                    yoyo: true,
-                    ease: 'Sine.inOut',
-                    duration: 100
-                });
+        let updated = false;
+
+        let campbg = this.add.image(10,0,'campbg').setOrigin(0,0);
+        campbg.setScale(.57);
+
+        this.sword = this.add.image(
+            700,
+            900,
+            'sword',
+        )
+
+    
+        .setInteractive()
+        .on('pointerover', () => {
+            this.showMessage("A sword")
+        })
+        .on('pointerdown', () => {
+            this.showMessage("You pick up a sword.");
+            this.gainItem('Sword');
+            this.tweens.add({
+                targets: this.sword,
+                y: `-=${2 * this.s}`,
+                alpha: { from: 1, to: -1 },
+                duration: 500,
+                onComplete: () => this.sword.destroy()
             });
+        })
 
-        let key = this.add.text(this.w * 0.5, this.w * 0.1, "🔑 key")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage("It's a nice key.")
-            })
-            .on('pointerdown', () => {
-                this.showMessage("You pick up the key.");
-                this.gainItem('key');
-                this.tweens.add({
-                    targets: key,
-                    y: `-=${2 * this.s}`,
-                    alpha: { from: 1, to: 0 },
-                    duration: 500,
-                    onComplete: () => key.destroy()
-                });
-            })
 
-        let door = this.add.text(this.w * 0.1, this.w * 0.15, "🚪 locked door")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => {
-                if (this.hasItem("key")) {
-                    this.showMessage("You've got the key for this door.");
-                } else {
-                    this.showMessage("It's locked. Can you find a key?");
-                }
-            })
-            .on('pointerdown', () => {
-                if (this.hasItem("key")) {
-                    this.loseItem("key");
-                    this.showMessage("*squeak*");
-                    door.setText("🚪 unlocked door");
-                    this.gotoScene('demo2');
-                }
-            })
+        this.matches = this.add.image(
+            1000,
+            850,
+            'matches',
+        )
+        
+        //matches.setScale(.5);
+
+        .setInteractive()
+        .on('pointerover', () => {
+            this.showMessage("A box of matches")
+        })
+        .on('pointerdown', () => {
+            this.showMessage("You pick up the matches.");
+            this.gainItem('Matches');
+            this.tweens.add({
+                targets: this.matches,
+                y: `-=${2 * this.s}`,
+                alpha: { from: 1, to: -1 },
+                duration: 500,
+                onComplete: () => this.matches.destroy()
+            });
+        })
+
+        this.sign1 = this.add.image(
+            400,
+            570,
+            'sign',
+        )
+        this.sign1.setScale(1.5) //resize
+        
+        .setInteractive()
+        
+        .on('pointerover', () => {
+           this.showMessage("Go to the forest")
+
+        })
+        .on('pointerdown', () => {
+                
+                this.gotoScene('forest');
+    
+        })
 
     }
 }
 
-class Demo2 extends AdventureScene {
+class forest extends AdventureScene {
     constructor() {
-        super("demo2", "The second room has a long name (it truly does).");
+        super("forest", "You are in the thick of a redwood forest");
     }
-    onEnter() {
-        this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage("You've got no other choice, really.");
-            })
-            .on('pointerdown', () => {
-                this.gotoScene('demo1');
-            });
 
-        let finish = this.add.text(this.w * 0.6, this.w * 0.2, '(finish the game)')
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage('*giggles*');
-                this.tweens.add({
-                    targets: finish,
-                    x: this.s + (this.h - 2 * this.s) * Math.random(),
-                    y: this.s + (this.h - 2 * this.s) * Math.random(),
-                    ease: 'Sine.inOut',
-                    duration: 500
-                });
-            })
-            .on('pointerdown', () => this.gotoScene('outro'));
+    preload(){
+        this.load.path = "./assets/";
+        this.load.image('forest', 'ogre_forest.png');
+        this.load.image('ogre', 'ogre.png');
+        this.load.image('firepit', 'fire_pit.png');
+
+    }
+
+    onEnter() {
+        let forest = this.add.image(10,0,'forest').setOrigin(0,0);
+        forest.setScale(.57);
+
+        this.ogre = this.add.image(
+            800,
+            400,
+            'ogre',
+        )
+        
+        this.ogre.setScale(2) //resize
+        
+        .setInteractive()
+        
+        .on('pointerover', () => {
+           this.showMessage("Attack the ogre with your sword!")
+
+        })
+        .on('pointerdown', () => {
+                
+                this.gotoScene('death');
+    
+        })
+
+        this.firepit = this.add.image(
+            800,
+            900,
+            'firepit',
+        )
+        
+        this.firepit.setScale(1.5) //resize
+        
+        .setInteractive()
+        
+        .on('pointerover', () => {
+           this.showMessage("light the fire with your matches")
+
+        })
+        .on('pointerdown', () => {
+                
+                this.gotoScene('happy ogre');
+    
+        })
+
+
+    }
+}
+
+class death extends Phaser.Scene {
+    constructor() {
+        super('death');
+    }
+    create() {
+        this.add.text(50, 50, "You Died!").setFontSize(50);
+        this.add.text(50, 100, "Click anywhere to restart.").setFontSize(20);
+        this.input.on('pointerdown', () => this.scene.start('campsite'));
     }
 }
 
@@ -96,12 +164,17 @@ class Intro extends Phaser.Scene {
     constructor() {
         super('intro')
     }
+
+    preload(){
+        this.load.image('campbg', './assets/campsite.png')
+    }
+
     create() {
         this.add.text(50,50, "Adventure awaits!").setFontSize(50);
         this.add.text(50,100, "Click anywhere to begin.").setFontSize(20);
         this.input.on('pointerdown', () => {
             this.cameras.main.fade(1000, 0,0,0);
-            this.time.delayedCall(1000, () => this.scene.start('demo1'));
+            this.time.delayedCall(1000, () => this.scene.start('campsite'));
         });
     }
 }
@@ -113,7 +186,7 @@ class Outro extends Phaser.Scene {
     create() {
         this.add.text(50, 50, "That's all!").setFontSize(50);
         this.add.text(50, 100, "Click anywhere to restart.").setFontSize(20);
-        this.input.on('pointerdown', () => this.scene.start('intro'));
+        this.input.on('pointerdown', () => this.scene.start('campsite'));
     }
 }
 
@@ -125,7 +198,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro, Demo1, Demo2, Outro],
+    scene: [Intro, campsite, forest, death, Outro],
     title: "Adventure Game",
 });
 
