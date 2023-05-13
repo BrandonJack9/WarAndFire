@@ -609,6 +609,8 @@ class lighthouse2 extends AdventureScene{
     preload(){
         this.load.path = "./assets/";
         this.load.image('lighthouse2', 'lighthouse2.png');
+        this.load.image('redneck', 'redneck.png');
+        this.load.image('cigar', 'cigar.png');
         
 
     }
@@ -617,26 +619,102 @@ class lighthouse2 extends AdventureScene{
         let lighthouse = this.add.image(10,0,'lighthouse2').setOrigin(0,0);
         lighthouse.setScale(.57);
 
-        /*this.door = this.add.image(
-            700,
-            600,
-            'door',
+        this.redneck = this.add.image(
+            680,
+            350,
+            'redneck',
         )
         
-        this.door.setScale(5) //resize
+        this.redneck.setScale(.7) //resize
         
         .setInteractive()
         
         .on('pointerover', () => {
-           this.showMessage("A locked door")
+           this.showMessage("Attack the redneck with your sword!")
 
         })
         .on('pointerdown', () => {
                 
-            this.gotoScene('lighthouse2');
+                this.gotoScene('death');
+    
+        })
 
-    })*/
+        
+        this.cigar = this.add.image(
+            690,
+            180,
+            'cigar',
+        )
+        
+        this.cigar.setScale(.7) //resize
+        
+        .setInteractive()
+        
+        .on('pointerover', () => {
+           this.showMessage("light the redneck's cigar with your matches")
 
+        })
+        .on('pointerdown', () => {
+                
+                this.gotoScene('lighthouse3');
+    
+        })
+        
+
+    }
+}
+
+class lighthouse3 extends AdventureScene{
+    constructor() {
+        super("lighthouse3", "You did it! Congrats on passing the vibe check.");
+    }
+
+    preload(){
+        this.load.path = "./assets/";
+        this.load.image('lighthouse3', 'lighthouse3.png');
+        
+        
+
+    }
+
+    onEnter() {
+        let lighthouse = this.add.image(10,0,'lighthouse3').setOrigin(0,0);
+        lighthouse.setScale(.57);
+        
+
+        
+        this.lighthouse = this.add.image(
+            720,
+            570,
+            'lighthouse3',
+        )
+        
+        this.lighthouse.setScale(.57) //resize
+        
+        .setInteractive()
+        
+        .on('pointerover', () => {
+           this.showMessage("go to the epilogue")
+
+        })
+        .on('pointerdown', () => {
+                
+                this.gotoScene('goodend');
+    
+        })
+        
+
+    }
+}
+
+class goodend extends Phaser.Scene {
+    constructor() {
+        super('goodend');
+    }
+    create() {
+        this.add.text(50, 50, "You Won!").setFontSize(50);
+        this.add.text(50, 100, "Click anywhere to restart.").setFontSize(20);
+        this.input.on('pointerdown', () => this.scene.start('campsite'));
     }
 }
 
@@ -689,7 +767,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro, campsite, forest, death, happyogre, beach, beachvibes, lighthouse1, lighthouse2, Outro],
+    scene: [Intro, campsite, forest, death, happyogre, beach, beachvibes, lighthouse1, lighthouse2, lighthouse3, goodend, Outro],
     title: "Adventure Game",
 });
 
