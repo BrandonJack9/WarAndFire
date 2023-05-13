@@ -95,6 +95,7 @@ class AdventureScene extends Phaser.Scene {
         return this.inventory.includes(item);
     }
 
+   
     gainItem(item) {
         if (this.inventory.includes(item)) {
             console.warn('gaining item already held:', item);
